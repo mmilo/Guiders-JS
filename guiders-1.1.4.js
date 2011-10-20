@@ -33,7 +33,7 @@ var guiders = (function($){
       onShow: null,
       overlay: false,
       position: 0, // 1-12 follows an analog clock, 0 means centered
-      title: "Sample title goes here",
+      title: "",
       width: 400,
       xButton: false // this places a closer "x" button in the top right of the guider
     },
@@ -307,7 +307,7 @@ var guiders = (function($){
       myGuider.elem.css("width", myGuider.width + "px");
 
       var guiderTitleContainer = guiderElement.find(".guider_title");
-			if(myGuider.title) {
+			if(myGuider.title.length > 0) {
 				guiderTitleContainer.html(myGuider.title);
 			}
 			else {
