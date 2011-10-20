@@ -52,7 +52,7 @@ var guiders = (function($){
       "</div>"
     ].join(""),
 
-    _arrowSize: 42, // = arrow's width and height
+    _arrowSize: 19, // = arrow's width and height
     _closeButtonTitle: "Close",
     _currentGuiderID: null,
     _guiders: {},
@@ -119,7 +119,7 @@ var guiders = (function($){
       var myWidth = myGuider.elem.innerWidth();
 
       if (myGuider.position === 0 || myGuider.attachTo === null) {
-        myGuider.elem.css("position", "absolute");
+        myGuider.elem.css("position", "absolute").addClass("guider_fixed");
         myGuider.elem.css("top", ($(window).height() - myHeight) / 3 + $(window).scrollTop() + "px");
         myGuider.elem.css("left", ($(window).width() - myWidth) / 2 + $(window).scrollLeft() + "px");
         return;
@@ -129,6 +129,7 @@ var guiders = (function($){
       var base = myGuider.attachTo.offset();
       var attachToHeight = myGuider.attachTo.innerHeight();
       var attachToWidth = myGuider.attachTo.innerWidth();
+			
 
       var top = base.top;
       var left = base.left;
@@ -212,20 +213,21 @@ var guiders = (function($){
       }
       var myGuiderArrow = $(myGuider.elem.find(".guider_arrow"));
       var newClass = {
-        1: "guider_arrow_down",
-        2: "guider_arrow_left",
-        3: "guider_arrow_left",
-        4: "guider_arrow_left",
-        5: "guider_arrow_up",
-        6: "guider_arrow_up",
-        7: "guider_arrow_up",
-        8: "guider_arrow_right",
-        9: "guider_arrow_right",
-        10: "guider_arrow_right",
-        11: "guider_arrow_down",
-        12: "guider_arrow_down"
+        1: "arrow_down",
+        2: "arrow_left",
+        3: "arrow_left",
+        4: "arrow_left",
+        5: "arrow_up",
+        6: "arrow_up",
+        7: "arrow_up",
+        8: "arrow_right",
+        9: "arrow_right",
+        10: "arrow_right",
+        11: "arrow_down",
+        12: "arrow_down"
       };
-      myGuiderArrow.addClass(newClass[position]);
+      myGuiderArrow.addClass("guider_" + newClass[position]);
+			myGuider.elem.addClass("attached_" + newClass[position]).addClass("guider_attached");
 
       var myHeight = myGuider.elem.innerHeight();
       var myWidth = myGuider.elem.innerWidth();
@@ -272,6 +274,7 @@ var guiders = (function($){
 
     next: function() {
       var currentGuider = guiders._guiders[guiders._currentGuiderID];
+
       if (typeof currentGuider === "undefined") {
         return;
       }
@@ -304,7 +307,13 @@ var guiders = (function($){
       myGuider.elem.css("width", myGuider.width + "px");
 
       var guiderTitleContainer = guiderElement.find(".guider_title");
-      guiderTitleContainer.html(myGuider.title);
+			if(myGuider.title) {
+				guiderTitleContainer.html(myGuider.title);
+			}
+			else {
+				guiderTitleContainer.remove();
+			}
+      
 
       guiderElement.find(".guider_description").html(myGuider.description);
 
@@ -342,7 +351,7 @@ var guiders = (function($){
     },
 
     hideAll: function(omitHidingOverlay) {
-      $(".guider").fadeOut("fast");
+      $(".guider").fadeOut("fast").removeClass('guider_visible');
       if (typeof omitHidingOverlay !== "undefined" && omitHidingOverlay === true) {
         // do nothing for now
       } else {
@@ -373,6 +382,7 @@ var guiders = (function($){
       }
 
       myGuider.elem.fadeIn("fast");
+			myGuider.elem.addClass("guider_visible")
 
       var windowHeight = $(window).height();
       var scrollHeight = $(window).scrollTop();
